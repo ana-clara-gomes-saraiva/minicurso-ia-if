@@ -2,7 +2,7 @@ import streamlit as st
 
 st.set_page_config(page_title="Calculadora de Notas", page_icon="🌸")
 
-# CSS
+# CSS (mantive o seu)
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600&display=swap');
@@ -41,47 +41,65 @@ st.markdown("""
 
 # Título
 st.markdown('<div class="titulo">🌸 Calculadora de Notas do IF 🎀</div>', unsafe_allow_html=True)
-st.markdown('<div class="texto">Preencha todas as categorias</div>', unsafe_allow_html=True)
+st.markdown('<div class="texto">Preencha as notas por categoria</div>', unsafe_allow_html=True)
 
-# Inputs organizados
-st.subheader("📚 Notas")
+st.subheader("📚 Notas por avaliação")
 
-col1, col2 = st.columns(2)
+# Caderno
+st.markdown("### 📒 Caderno")
+c1 = st.number_input("Nota 1", 0.0, 10.0, step=0.1, key="c1")
+c2 = st.number_input("Nota 2", 0.0, 10.0, step=0.1, key="c2")
+media_caderno = (c1 + c2) / 2
 
-with col1:
-    caderno = st.number_input("📒 Caderno", 0.0, 10.0, step=0.1)
-    trabalhos = st.number_input("📝 Trabalhos", 0.0, 10.0, step=0.1)
+# Trabalhos
+st.markdown("### 📝 Trabalhos")
+t1 = st.number_input("Nota 1 ", 0.0, 10.0, step=0.1, key="t1")
+t2 = st.number_input("Nota 2 ", 0.0, 10.0, step=0.1, key="t2")
+media_trabalhos = (t1 + t2) / 2
 
-with col2:
-    prova = st.number_input("📊 Prova", 0.0, 10.0, step=0.1)
-    atitudinal = st.number_input("🌟 Atitudinal", 0.0, 10.0, step=0.1)
+# Prova
+st.markdown("### 📊 Prova")
+p1 = st.number_input("Prova 1", 0.0, 10.0, step=0.1)
+p2 = st.number_input("Prova 2", 0.0, 10.0, step=0.1)
+media_prova = (p1 + p2) / 2
+
+# Atitudinal
+st.markdown("### 🌟 Atitudinal")
+atitudinal = st.number_input("Nota Atitudinal", 0.0, 10.0, step=0.1)
 
 # Botão
 if st.button("Calcular Média 💖"):
 
-    # Pesos (você pode ajustar)
-    media = (
-        caderno * 0.2 +
-        trabalhos * 0.2 +
-        prova * 0.5 +
+    # Média final ponderada
+    media_final = (
+        media_caderno * 0.2 +
+        media_trabalhos * 0.2 +
+        media_prova * 0.5 +
         atitudinal * 0.1
     )
 
-    # Definição visual
-    if media >= 7:
+    # Status
+    if media_final >= 7:
         status = "Aprovado 😄"
         cor = "#4CAF50"
-    elif media >= 5:
+    elif media_final >= 5:
         status = "Recuperação 😐"
         cor = "#FFC107"
     else:
         status = "Reprovado 😢"
         cor = "#F44336"
 
-    # Card resultado
+    # Mostrar médias por categoria
+    st.write("### 📊 Detalhamento")
+    st.write(f"Caderno: {media_caderno:.2f}")
+    st.write(f"Trabalhos: {media_trabalhos:.2f}")
+    st.write(f"Prova: {media_prova:.2f}")
+    st.write(f"Atitudinal: {atitudinal:.2f}")
+
+    # Card final
     st.markdown(f"""
     <div class="card" style="background-color:{cor};">
-        🎀 Média Final: {media:.2f} <br><br>
+        🎀 Média Final: {media_final:.2f} <br><br>
         {status}
     </div>
     """, unsafe_allow_html=True)
